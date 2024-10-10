@@ -5,6 +5,7 @@ import "./globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../../theme/theme";
 import GoogleTagManager from "@/utils/gtm";
+import { useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,6 +16,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+useEffect(() => {
+  // Add Leadfeeder script within useEffect (optional for potential async execution)
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://sc.lfeeder.com/lftracker_v1_bElvO73oMG67ZMqj.js'; // Assuming your site ID is 'bElvO730vrb4ZMqj'
+  document.head.appendChild(script);
+}, [])
+
+
   return (
     <html lang="en">
       <head>
