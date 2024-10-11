@@ -9,55 +9,64 @@ import { useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// Extending the window interface to include Leadfeeder
+declare global {
+  interface Window {
+    ldfdr?: any;
+  }
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   useEffect(() => {
-    const script = document.createElement("script");
-    script.innerHTML = `
-      (function(l,e,a,d,f,eeder){
-        l['LeadfeederObject']=f;l[f]=l[f]||function(){
-        (l[f].q=l[f].q||[]).push(arguments)},l[f].l=1*new Date();
-        e=a.createElement(d),f=a.getElementsByTagName(d)[0];
-        e.async=1;e.src='https://lftracker.leadfeeder.com/lftracker_v1.js';
-        f.parentNode.insertBefore(e,f)
-      }(window,document,'script','script','lf'));
+    if (process.env.NEXT_PUBLIC_LEADFEEDER_ID) {
+      const script = document.createElement("script");
+      script.src = 'https://lftracker.leadfeeder.com/lftracker_v1.js';
+      script.async = true;
 
-      lf('init', '${process.env.NEXT_PUBLIC_LEADFEEDER_ID}');
-    `;
-    document.head.appendChild(script);
+      script.onload = () => {
+        if (typeof window !== "undefined" && window.ldfdr) {
+          window.ldfdr = window.ldfdr || function () {
+            (window.ldfdr.q = window.ldfdr.q || []).push(arguments);
+          };
+          
+          window.ldfdr('init', process.env.NEXT_PUBLIC_LEADFEEDER_ID);
+        }
+      };
+
+      document.head.appendChild(script);
+    }
   }, []);
-
-  // useEffect(() => {
-  //   // Add Leadfeeder script within useEffect (optional for potential async execution)
-  //   const script = document.createElement('script');
-  //   script.async = true;
-  //   script.src = 'https://sc.lfeeder.com/lftracker_v1_bElvO73oMG67ZMqj.js'; // Assuming your site ID is 'bElvO730vrb4ZMqj'
-  //   document.head.appendChild(script);
-  // }, [])
-
+  
   return (
     <html lang="en">
       <head>
         {process.env.NEXT_PUBLIC_GTM_ID && (
           <GoogleTagManager containerId={process.env.NEXT_PUBLIC_GTM_ID} />
         )}
-        ,
-        {/* {process.env.NEXT_PUBLIC_LEADFEEDER_ID && (
-          <Leadfeeder/>
-        )} */}
       </head>
 
       <body className={inter.className}>
         <noscript>
-          <iframe src="https://sc.lfeeder.com/lftracker_v1.js"></iframe>
+          {/* Leadfeeder tracker noscript iframe */}
+          <iframe 
+            src="https://sc.lfeeder.com/lftracker_v1.js" 
+            style={{ display: 'none' }} 
+            title="Leadfeeder noscript"
+          ></iframe>
+          {/* Google Tag Manager noscript iframe */}
+          <iframe 
+            src={`https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GTM_ID}`} 
+            height="0" 
+            width="0" 
+            style={{ display: 'none', visibility: 'hidden' }} 
+            title="Google Tag Manager"
+          ></iframe>
         </noscript>
-        <noscript>
-          {" "}
-          <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M6T49V59"></iframe>
-        </noscript>{" "}
         <ChakraProvider theme={theme}>{children}</ChakraProvider>
       </body>
     </html>
