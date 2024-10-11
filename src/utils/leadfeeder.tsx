@@ -4,7 +4,7 @@ import React from 'react'
 const Leadfeeder = () => {
   return (
     <>
-    <Script
+    {/* <Script
   dangerouslySetInnerHTML={{
     __html: `
       (function(l,e,a,d,f,eeder){
@@ -17,7 +17,7 @@ const Leadfeeder = () => {
       lf('init', '${process.env.NEXT_PUBLIC_LEADFEEDER_ID}');
     `
   }}
-/>
+/> */}
 
     </>
   )

@@ -18,7 +18,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-
+  useEffect(() => {
+    const leadfeederScript = document.createElement('script');
+    leadfeederScript.innerHTML = `
+      (function(l,e,a,d,f,eeder){
+        l['LeadfeederObject']=f;l[f]=l[f]||function(){
+        (l[f].q=l[f].q||[]).push(arguments)},l[f].l=1*new Date();
+        e=a.createElement(d),f=a.getElementsByTagName(d)[0];
+        e.async=1;e.src='https://lftracker.leadfeeder.com/lftracker_v1.js';
+        f.parentNode.insertBefore(e,f)
+      }(window,document,'script','script','lf'));
+      lf('init', '${process.env.NEXT_PUBLIC_LEADFEEDER_ID}');
+    `;
+    document.head.appendChild(leadfeederScript);
+  }, []);
+  
 // useEffect(() => {
 //   // Add Leadfeeder script within useEffect (optional for potential async execution)
 //   const script = document.createElement('script');
@@ -39,19 +53,6 @@ export default function RootLayout({
         )} */}
 
         <head>
- 
-  
-  {/* <script>
-    // Leadfeeder tracking script
-    (function(l,e,a,d,f,eeder){
-      l['LeadfeederObject']=f;l[f]=l[f]||function(){
-      (l[f].q=l[f].q||[]).push(arguments)},l[f].l=1*new Date();
-      e=a.createElement(d),f=a.getElementsByTagName(d)[0];
-      e.async=1;e.src='https://lftracker.leadfeeder.com/lftracker_v1.js';
-      f.parentNode.insertBefore(e,f)
-    }(window,document,'script','script','lf'));
-    lf('init', {process.env.NEXT_PUBLIC_LEADFEEDER_ID});
-  </script> */}
 
 </head>
 
