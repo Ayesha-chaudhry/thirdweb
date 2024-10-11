@@ -6,7 +6,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../../theme/theme";
 import GoogleTagManager from "@/utils/gtm";
 import { useEffect } from "react";
-import Leadfeeder from "@/utils/leadfeeder";
 
 const inter = Inter({ subsets: ["latin"] });
 
