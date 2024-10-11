@@ -21,8 +21,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
-  useEffect(() => {
+    useEffect(() => {
     if (process.env.NEXT_PUBLIC_LEADFEEDER_ID) {
       const script = document.createElement("script");
       script.src = 'https://lftracker.leadfeeder.com/lftracker_v1.js';
